@@ -5,7 +5,7 @@ const modalForm = document.querySelector('form');
 const modalBtn = modalForm.querySelector('button'); 
 const modalCloseBtn = document.querySelector('.close__modal'); 
 const btnAddCat = document.querySelector('.add__cat');
-let addEventCat = 0;
+
 
 //---------- Отрисовка и обновление карточек
 const refreshCatsAndContent = () => {
@@ -33,12 +33,9 @@ const refreshCardsLocalStorage = () => {
 
 //-------------Добавление одного кота------------------
 btnAddCat.addEventListener('click', () => {
-	addEventCat = 1;
 	document.querySelector('.disabled').readOnly = false;
 	modalOverlay.classList.add('active');
-	if (addEventCat === 1) {
-		modalForm.addEventListener('submit', (event) => { 
-			
+		modalForm.addEventListener('submit', (event) => {			
 				event.preventDefault();
 				const formData = new FormData(modalForm); 
 				const cat = Object.fromEntries(formData); 
@@ -48,10 +45,7 @@ btnAddCat.addEventListener('click', () => {
 				refreshCardsLocalStorage(); 
 				})
 			modalForm.reset();
-			addEventCat = 0;		
-						
-		});
-	}
+		}, { once: true });
 })
 
 // ----------------Просмотр одного кота---------------
@@ -63,11 +57,9 @@ const openCatCardPopup = (cat) => {
 		catPopup.remove();
 	});
 };
-
 // --------------Обработка кликов на кнопоки карточек-----------------
 content.addEventListener('click', (event) => {
 	const idCat = event.target.value;
-	console.log(idCat);
 		if (event.target.tagName === 'BUTTON') {
 			switch (event.target.className) {
 				case 'cat-card-view':
@@ -87,9 +79,8 @@ content.addEventListener('click', (event) => {
 								}
 							})
 						}
-					});					
+					});
 					modalForm.addEventListener('submit', (event) => {
-						console.log('cat-card-update');
 						event.preventDefault();
 						const formData = new FormData(modalForm); 
 						const cat = Object.fromEntries(formData); 
@@ -97,11 +88,12 @@ content.addEventListener('click', (event) => {
 							deleteCatLocalStorage(idCat);
 							addCatLocalStorage(cat);
 							refreshCardsLocalStorage();
-							console.log('updateCat');							
+					
 						}); 
 						modalOverlay.classList.remove('active');
 						modalForm.reset();
-					});
+					}, { once: true });
+					modalForm.reset();
 				break;
 				case 'cat-card-delete': 
 						api.deleteCat(idCat).then((res) => {
@@ -112,6 +104,7 @@ content.addEventListener('click', (event) => {
 				default: break;
 			}
 		}
+		
 	});
 // -------------------------------
 // Закрытие модалки на кпоку
