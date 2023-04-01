@@ -5,6 +5,7 @@ const modalForm = document.querySelector('form');
 const modalBtn = modalForm.querySelector('button'); 
 const modalCloseBtn = document.querySelector('.close__modal'); 
 const btnAddCat = document.querySelector('.add__cat');
+let addEventCat = 0;
 
 //---------- Отрисовка и обновление карточек
 const refreshCatsAndContent = () => {
@@ -18,12 +19,9 @@ const refreshCatsAndContent = () => {
         content.insertAdjacentHTML('afterbegin', generateCard(element));
         });
     });
-	// const cards2 = JSON.parse(store.getItem('cats'))
-	// console.log(cards2);
 };
 
 refreshCatsAndContent();
-
 
 const refreshCardsLocalStorage = () => {
 	content.innerHTML = '';
@@ -35,19 +33,25 @@ const refreshCardsLocalStorage = () => {
 
 //-------------Добавление одного кота------------------
 btnAddCat.addEventListener('click', () => {
-	// document.querySelector('.disabled').readOnly = false;
+	addEventCat = 1;
+	document.querySelector('.disabled').readOnly = false;
 	modalOverlay.classList.add('active');
+	if (addEventCat === 1) {
 		modalForm.addEventListener('submit', (event) => { 
-			event.preventDefault();
-			const formData = new FormData(modalForm); 
-			const cat = Object.fromEntries(formData); 
-			api.addCat(cat).then(() => { 
-			modalOverlay.classList.remove('active');
-			addCatLocalStorage(cat);
-			refreshCardsLocalStorage(); 
-			})
-			modalForm.reset();			
-	});
+			
+				event.preventDefault();
+				const formData = new FormData(modalForm); 
+				const cat = Object.fromEntries(formData); 
+				api.addCat(cat).then(() => { 
+				modalOverlay.classList.remove('active');
+				addCatLocalStorage(cat);
+				refreshCardsLocalStorage(); 
+				})
+			modalForm.reset();
+			addEventCat = 0;		
+						
+		});
+	}
 })
 
 // ----------------Просмотр одного кота---------------
@@ -72,7 +76,32 @@ content.addEventListener('click', (event) => {
 					});
 				break;
 				case 'cat-card-update': 
-					
+					modalOverlay.classList.add('active');
+					api.getCatById(idCat).then((res) => {
+						document.querySelector('.disabled').readOnly = true;
+						let form_elem = modalForm.getElementsByTagName("input");
+						for (let index = 0; index < form_elem.length; index++) {
+							Object.entries(res).forEach(([key, value]) => {
+								if (form_elem[index].name == key) {
+									form_elem[index].value = value;
+								}
+							})
+						}
+					});					
+					modalForm.addEventListener('submit', (event) => {
+						console.log('cat-card-update');
+						event.preventDefault();
+						const formData = new FormData(modalForm); 
+						const cat = Object.fromEntries(formData); 
+						api.updateCat(cat).then((res) => { 							
+							deleteCatLocalStorage(idCat);
+							addCatLocalStorage(cat);
+							refreshCardsLocalStorage();
+							console.log('updateCat');							
+						}); 
+						modalOverlay.classList.remove('active');
+						modalForm.reset();
+					});
 				break;
 				case 'cat-card-delete': 
 						api.deleteCat(idCat).then((res) => {
@@ -88,11 +117,10 @@ content.addEventListener('click', (event) => {
 // Закрытие модалки на кпоку
 modalCloseBtn.addEventListener('click', () => {
     modalOverlay.classList.remove('active');
+	modalForm.reset();	
+	addEventCat = 0;
 })
-
-
 // ------------------------------------------------
-
 
 const addCatLocalStorage = (cat) => {
 	store.setItem('cats', JSON.stringify([...JSON.parse(store.getItem('cats')), cat]));
@@ -102,15 +130,6 @@ const deleteCatLocalStorage = (catId) => {
 	store.setItem('cats',JSON.stringify(JSON.parse(store.getItem('cats')).filter((el) => el.id != catId)));
 };
 
-const getNewIdOfCatSync = () => {
-	let res = JSON.parse(store.getItem('cats')); 
-	console.log('getNewIdOfCatSync', res);
-	if (res.length) {
-		return Math.max(...res.map((el) => el.id)) + 1;
-	} else {
-		return 1;
-	}
-};
 
 
 

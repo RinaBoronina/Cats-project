@@ -193,7 +193,14 @@ img {
     margin-top: 20px;
     background: url(img/default.jpg);
     background-size: cover;
+    display: flex;
 }
+.image_card img {
+    min-width: 100%;
+    min-height: 100%;
+    flex-shrink: 0;
+}
+
 
 .card_title {
     font-size: 18px;
