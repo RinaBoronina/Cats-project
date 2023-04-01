@@ -9,9 +9,7 @@ const generateCatCardPopup = (cat) => {
                 <div>Возраст: ${cat.age}</div>
                 <div>Рейтинг: ${cat.rate}</div>
             </div>
-            <div class="popup__card-img" style="background-image: url(${
-                cat.image || 'img/default.jpg'
-            })">
+            <div class="popup__card-img" style="background: url(${ cat.image }); background-size: cover;">
                 
             </div>
         </div>
