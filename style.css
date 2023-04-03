@@ -146,8 +146,6 @@ img {
 }
 
 .cat-card {
-    width: 300px;
-    min-height: 300px;
     border: 1px solid red;
     border-radius: 20px;
     padding: 15px;
@@ -196,13 +194,16 @@ img {
     flex-shrink: 0;
 }
 
-
 .card_title {
     font-size: 18px;
     font-weight: bold;
 }
 .cat-card-btns {
     width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
 }
 .cat-card-view,
 .cat-card-update,
@@ -213,6 +214,14 @@ img {
     background-color: rgba(30, 144, 255, 0.70);
     border: none;
     cursor: pointer;
+}
+
+@media screen and (max-width: 1024px){
+    .content {
+        gap: 15px; 
+        padding: 10px;
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 /* --------Modal-------- */
