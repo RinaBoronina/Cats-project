@@ -6,8 +6,7 @@ const modalBtn = modalForm.querySelector('button');
 const modalCloseBtn = document.querySelector('.close__modal'); 
 const btnAddCat = document.querySelector('.add__cat');
 const defaultImg = 'https://proprikol.ru/wp-content/uploads/2020/08/krasivye-kartinki-kotikov-58.jpg';
-
-
+const cardLike = document.querySelector('.card__like');
 //---------- Отрисовка и обновление карточек
 const refreshCatsAndContent = () => {
     content.innerHTML = '';
@@ -40,12 +39,12 @@ btnAddCat.addEventListener('click', () => {
 				event.preventDefault();
 				const formData = new FormData(modalForm); 
 				const cat = Object.fromEntries(formData); 
+				
 				if (cat.favorite) {
 					cat.favorite = true;
 				} else {
 					cat.favorite = false;
 				}
-				console.log(cat);
 				api.addCat(cat).then(() => { 
 				modalOverlay.classList.remove('active');
 				addCatLocalStorage(cat);
@@ -117,7 +116,22 @@ content.addEventListener('click', (event) => {
 				break;
 				default: break;
 			}
-		} 
+		}
+		if (event.target.classList.contains('card__like')) {
+			const idCatLike = event.target.dataset.id;
+			const obj = {
+				id: idCatLike,
+				favorite: true,
+			};
+			if (event.target.classList.contains('fa-regular')) {
+				obj.favorite = true;
+			} else {
+				obj.favorite = false;
+			}
+			event.target.classList.toggle('fa-regular');
+			event.target.classList.toggle('fa-solid');
+			api.updateCat(obj)
+		}
 	});
 // -------------------------------
 // Закрытие модалки на кпоку
@@ -136,3 +150,12 @@ const deleteCatLocalStorage = (catId) => {
 	store.setItem('cats',JSON.stringify(JSON.parse(store.getItem('cats')).filter((el) => el.id != catId)));
 };
 
+const getNewIdOfCat = () => {
+	return api.getIdsOfCat().then((res) => {
+		if (res.length) {
+			return Math.max(...res) + 1;
+		} else {
+			return 1;
+		}
+	});
+};
