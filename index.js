@@ -8,9 +8,6 @@ const btnAddCat = document.querySelector('.add__cat');
 const defaultImg = 'https://proprikol.ru/wp-content/uploads/2020/08/krasivye-kartinki-kotikov-58.jpg';
 
 
-// const cardLike = document.getElementsByClassName('fa-heart');
-
-
 //---------- Отрисовка и обновление карточек
 const refreshCatsAndContent = () => {
     content.innerHTML = '';
@@ -86,6 +83,9 @@ content.addEventListener('click', (event) => {
 							Object.entries(res).forEach(([key, value]) => {
 								if (form_elem[index].name == key) {
 									form_elem[index].value = value;
+									if(value === true) {
+										form_elem[index].checked = true;
+									}
 								}
 							})
 						}
