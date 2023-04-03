@@ -287,6 +287,13 @@ img {
     margin-top: 20px;
 }
 
+.fieldset__favorite {
+    width: 100%;
+    border: none;
+    display: flex;
+    gap: 20px;
+    padding: 10px 0;
+}
 /* .disabled {
     pointer-events: none;
 } */

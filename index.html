@@ -47,8 +47,10 @@
                         <input class="modal__input" name="rate" id='rate' type="number" placeholder="Рейтинг" required />
                         <label class="modal__label" for="description" required >Описание</label>
                         <input class="modal__input" name="description" id="description" placeholder="Описание" required></input>
-                        <label class="modal__label" for="favorite" required >Любимчик</label>
-                        <input type="checkbox" name="favorite" id='favorite' value="True">
+                        <fieldset class="fieldset__favorite">
+                            <label class="modal__label" for="favorite" required >Любимчик</label>
+                            <input type="checkbox" name="favorite" id='favorite' value="True">
+                        </fieldset>
                         <button class="modal__button" type="submit">Ok</button>
                     </form>
                 </div>
