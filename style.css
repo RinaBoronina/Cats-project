@@ -157,9 +157,6 @@ img {
     text-align: center;
     gap: 20px;
     position: relative;
-    /* background: url(https://avatars.mds.yandex.net/i?id=f371baa9483d5c69403e4d42ddc139970a02e823-9094507-images-thumbs&n=13) no-repeat;
-    background-position: center;
-    background-size: cover; */
     overflow: hidden;
 }
 
@@ -191,8 +188,6 @@ img {
     margin-bottom: 10px;
     overflow: hidden;
     margin-top: 20px;
-    background: url(img/default.jpg);
-    background-size: cover;
     display: flex;
 }
 .image_card img {

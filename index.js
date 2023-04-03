@@ -5,6 +5,10 @@ const modalForm = document.querySelector('form');
 const modalBtn = modalForm.querySelector('button'); 
 const modalCloseBtn = document.querySelector('.close__modal'); 
 const btnAddCat = document.querySelector('.add__cat');
+const defaultImg = 'https://proprikol.ru/wp-content/uploads/2020/08/krasivye-kartinki-kotikov-58.jpg';
+
+
+// const cardLike = document.getElementsByClassName('fa-heart');
 
 
 //---------- Отрисовка и обновление карточек
@@ -39,11 +43,17 @@ btnAddCat.addEventListener('click', () => {
 				event.preventDefault();
 				const formData = new FormData(modalForm); 
 				const cat = Object.fromEntries(formData); 
+				if (cat.favorite) {
+					cat.favorite = true;
+				} else {
+					cat.favorite = false;
+				}
+				console.log(cat);
 				api.addCat(cat).then(() => { 
 				modalOverlay.classList.remove('active');
 				addCatLocalStorage(cat);
 				refreshCardsLocalStorage(); 
-				})
+			})
 			modalForm.reset();
 		}, { once: true });
 })
@@ -84,11 +94,15 @@ content.addEventListener('click', (event) => {
 						event.preventDefault();
 						const formData = new FormData(modalForm); 
 						const cat = Object.fromEntries(formData); 
+						if (cat.favorite) {
+							cat.favorite = true;
+						} else {
+							cat.favorite = false;
+						}
 						api.updateCat(cat).then((res) => { 							
 							deleteCatLocalStorage(idCat);
 							addCatLocalStorage(cat);
 							refreshCardsLocalStorage();
-					
 						}); 
 						modalOverlay.classList.remove('active');
 						modalForm.reset();
@@ -96,15 +110,14 @@ content.addEventListener('click', (event) => {
 					modalForm.reset();
 				break;
 				case 'cat-card-delete': 
-						api.deleteCat(idCat).then((res) => {
+						api.deleteCat(idCat).then(() => {
 							deleteCatLocalStorage(idCat);
 							refreshCardsLocalStorage();
 						});
 				break;
 				default: break;
 			}
-		}
-		
+		} 
 	});
 // -------------------------------
 // Закрытие модалки на кпоку
@@ -122,8 +135,4 @@ const addCatLocalStorage = (cat) => {
 const deleteCatLocalStorage = (catId) => {
 	store.setItem('cats',JSON.stringify(JSON.parse(store.getItem('cats')).filter((el) => el.id != catId)));
 };
-
-
-
-
 

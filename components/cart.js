@@ -1,9 +1,9 @@
 const generateCard = (cat) => {
 	return `
         <div class="cat-card">
-        <i class="fa-solid fa-heart card__like"></i>
+        <i class="fa-heart card__like ${cat.favorite ? 'fa-solid' : 'fa-regular'}"></i>
             <div class="image_card" >
-                <img src=${cat.image} /> 
+                <img src=${cat.image !== '' ? cat.image : defaultImg} /> 
             </div>
             <div class="card_title">Меня зовут: ${cat.name}</div>
             <div class="card_rate">Возраст: ${cat.rate} </div>
