@@ -6,7 +6,7 @@ const generateCard = (cat) => {
                 <img src=${cat.image !== '' ? cat.image : defaultImg} /> 
             </div>
             <div class="card_title">Меня зовут: ${cat.name}</div>
-            <div class="card_rate">Возраст: ${cat.rate} </div>
+            <div class="card_rate">Возраст: ${cat.age} </div>
             <div class="cat-card-btns">
                 <button class="cat-card-view" value=${cat.id}>Посмотреть</button>
                 <button class="cat-card-update" value=${cat.id}>Изменить</button> 
