@@ -37,15 +37,20 @@ btnAddCat.addEventListener('click', () => {
 	modalOverlay.classList.add('active');
 		modalForm.addEventListener('submit', (event) => {			
 				event.preventDefault();
+				// Проверка на картинку есть или нет кота
+				const reg = 'http';
+				if (!modalForm.image.value.startsWith(reg)) {
+					modalForm.image.value = defaultImg;
+				} 
 				const formData = new FormData(modalForm); 
 				const cat = Object.fromEntries(formData); 
-				
 				if (cat.favorite) {
 					cat.favorite = true;
 				} else {
 					cat.favorite = false;
 				}
-				api.addCat(cat).then(() => { 
+				
+				api.addCat({...cat, id:getNewIdOfCat()}).then(() => { 
 				modalOverlay.classList.remove('active');
 				addCatLocalStorage(cat);
 				refreshCardsLocalStorage(); 
@@ -150,12 +155,22 @@ const deleteCatLocalStorage = (catId) => {
 	store.setItem('cats',JSON.stringify(JSON.parse(store.getItem('cats')).filter((el) => el.id != catId)));
 };
 
+// const getNewIdOfCat = () => {
+// 	return api.getIdsOfCat().then((res) => {
+// 		if (res.length) {
+// 			return Math.max(...res) + 1;
+// 		} else {
+// 			return 1;
+// 		}
+// 	});
+// };
+
 const getNewIdOfCat = () => {
-	return api.getIdsOfCat().then((res) => {
-		if (res.length) {
-			return Math.max(...res) + 1;
-		} else {
-			return 1;
-		}
-	});
+	let res = JSON.parse(store.getItem('cats')); 
+	if (res.length) {
+		console.log(Math.max(...res.map((el) => el.id)) + 1);
+		return Math.max(...res.map((el) => el.id)) + 1; 
+	} else {
+		return 1;
+	}
 };

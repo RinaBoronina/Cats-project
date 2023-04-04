@@ -16,3 +16,4 @@ const generateCard = (cat) => {
     `;
 };
 
+/* <img src=${cat.image !== '' ? cat.image : './img/logo_cat.png'} />  */
